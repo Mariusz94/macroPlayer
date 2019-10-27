@@ -1,7 +1,16 @@
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.awt.*;
 import java.awt.event.InputEvent;
 
 public class Main {
+
+    private static Logger logMain = LogManager.getLogger(Main.class);
+    Robot robot = new Robot();
+
+    public Main() throws AWTException {
+    }
 
     public static void main(String[] args) throws AWTException {
         findStartPosition();
@@ -10,7 +19,7 @@ public class Main {
         while(counter < stopCounting) {
             choiceLvl(EnumLvl.SUPER_HARD);
             choicePicture("Go!",new Color(238,146,21),1674,985,200,200);
-            choicePicture("End Game",new Color(40,70,62),1635,871,3000,2000);
+            choicePicture("End Game",new Color(31,70,62),1635,871,3000,2000);
             choicePicture("Ok",new Color(238,146,21),1674,985,200,200);
             choicePicture("Close",new Color(101,149,107),1633,775,200,200);
             counter++;
@@ -26,9 +35,10 @@ public class Main {
             strzalka = robot.getPixelColor(1401, 254);
 
             if (strzalka.equals(colorStrzalki)) {
-                System.out.println("---------------------------");
-                System.out.println("Jestem na dobrej pozycji");
-                System.out.println("---------------------------");
+                logMain.info("---------------------------");
+                logMain.info("Jestem na dobrej pozycji");
+                logMain.info("---------------------------");
+
                 break;
             }
         }
@@ -57,18 +67,18 @@ public class Main {
         long startTime = System.currentTimeMillis();
         while (true) {
             if (System.currentTimeMillis() - startTime > stopTime){
-                System.out.println("Przerwalem poszukiwania " + name);
+                logMain.info("Przerwalem poszukiwania " + name);
                 break;
             }
 
             colorPicker = robot.getPixelColor(xPoint, yPoint);
-            robot.delay(200);
+            robot.delay(100);
             printInfoColor(name, colorPicker, colorWanted);
-            robot.delay(200);
+            colorComparison(colorPicker,colorWanted);
             if (colorComparison(colorPicker,colorWanted)) {
                 robot.delay(xTimeWaitMS);
                 robot.mouseMove(xPoint, yPoint);
-                System.out.println("Znalazłem kolor " + name);
+                logMain.info("Znalazłem kolor " + name);
                 clickMouse("left",robot,1);
                 robot.delay(1000);
                 break;
@@ -77,9 +87,14 @@ public class Main {
     }
 
     public static boolean colorComparison (Color colorPicker, Color colorWanted){
-        if (Math.abs(colorPicker.getRed()-colorWanted.getRed()) < 10 &&
-                Math.abs(colorPicker.getGreen()-colorWanted.getGreen()) < 5 &&
-                Math.abs(colorPicker.getBlue()-colorWanted.getBlue()) < 5 ){
+        logMain.info("Różnica kolorów: r=" + Math.abs(colorPicker.getRed()-colorWanted.getRed()) +
+                " g=" + Math.abs(colorPicker.getGreen()-colorWanted.getGreen()) +
+                " b=" + Math.abs(colorPicker.getBlue()-colorWanted.getBlue()));
+
+        if (Math.abs(colorPicker.getRed()-colorWanted.getRed()) <= 10 &&
+                Math.abs(colorPicker.getGreen()-colorWanted.getGreen()) <= 5 &&
+                Math.abs(colorPicker.getBlue()-colorWanted.getBlue()) <= 5 ){
+
             return true;
         }
 
@@ -87,7 +102,7 @@ public class Main {
     }
 
     public static void printInfoColor(String name, Color colorPicker, Color colorWanted) {
-        System.out.println("Sprawdzam kolor : " + name + " r=" + colorPicker.getRed()
+        logMain.info("Sprawdzam kolor : " + name + " r=" + colorPicker.getRed()
                 + " g=" + colorPicker.getGreen() + " b=" + colorPicker.getBlue() +
                 " chcę : r=" + colorWanted.getRed() + " g=" + colorWanted.getGreen() +
                 " b=" + colorWanted.getBlue());
@@ -114,6 +129,7 @@ public class Main {
             r.delay(200);
             r.mouseRelease(mouse);
             r.delay(200);
+            logMain.info("click");
         }
     }
 }
