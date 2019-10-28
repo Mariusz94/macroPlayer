@@ -50,18 +50,24 @@ public class Main {
     private static int TIME_WAIT_AFTER_DETECTION = 200; //MS
     private static int TIME_WAIT_AFTER_DETECTION_END_GAME = 3000; //MS
 
-    private static int TIME_STOP_GO= 1000;
-    private static int TIME_STOP_END_GAME= 4000;
-    private static int TIME_STOP_OK= 1000;
-    private static int TIME_STOP_CLOSE= 200;
-    private static int TIME_AFTER_STOP_LOOK_FOR_CHOICE_LVL = 2000; //MS
+    private static int TIME_STOP_GO= 200; //MS
+    private static int TIME_STOP_END_GAME= 200; //MS
+    private static int TIME_STOP_OK= 200; //MS
+    private static int TIME_STOP_CLOSE= 200; //MS
+    private static int TIME_AFTER_STOP_LOOK_FOR_CHOICE_LVL = 200; //MS
+
+    private static int MARGIN_PIXEL_R= 10;
+    private static int MARGIN_PIXEL_G= 10;
+    private static int MARGIN_PIXEL_B= 10;
+
+    private static EnumLvl lvl = EnumLvl.HARD;
 
 
     public static void main(String[] args) throws AWTException {
         //findStartPosition();
 
         while(true) {
-            choiceLvl(EnumLvl.HARD);
+            choiceLvl(lvl);
             choicePicture("Go!",new Color(238,146,21),X_POINT_GO,Y_POINT_GO,TIME_WAIT_AFTER_DETECTION,TIME_STOP_GO);
             choicePicture("End Game",new Color(31,70,62),X_POINT_END_GAME,Y_POINT_END_GAME,TIME_WAIT_AFTER_DETECTION_END_GAME,TIME_STOP_END_GAME);
             choicePicture("Ok",new Color(238,146,21),X_POINT_OK,Y_POINT_OK,TIME_WAIT_AFTER_DETECTION,TIME_STOP_OK);
@@ -126,9 +132,9 @@ public class Main {
                 " g=" + Math.abs(colorPicker.getGreen()-colorWanted.getGreen()) +
                 " b=" + Math.abs(colorPicker.getBlue()-colorWanted.getBlue()));
 
-        if (Math.abs(colorPicker.getRed()-colorWanted.getRed()) <= 10 &&
-                Math.abs(colorPicker.getGreen()-colorWanted.getGreen()) <= 10 &&
-                Math.abs(colorPicker.getBlue()-colorWanted.getBlue()) <= 10 ){
+        if (Math.abs(colorPicker.getRed()-colorWanted.getRed()) <= MARGIN_PIXEL_R &&
+                Math.abs(colorPicker.getGreen()-colorWanted.getGreen()) <= MARGIN_PIXEL_G &&
+                Math.abs(colorPicker.getBlue()-colorWanted.getBlue()) <= MARGIN_PIXEL_B ){
 
             return true;
         }
